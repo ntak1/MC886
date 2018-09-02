@@ -48,13 +48,19 @@ def split_data (dataset):
             test_volume[:,i] = test[categorical_labels[i]]
 
     # Separates the input from the label organize data in (number_features, number_of_examples)
-    x_train = (train_volume[:, 0:9]).T
-    y_train = (train_volume[:, 9].reshape(train_size,1)).T
-    x_validation = validation_volume [:, 0:9].T
-    y_validation = validation_volume [:,9].reshape(ny, validation_size)
-    x_test = test_volume [:,0:9].T
-    y_test = test_volume [:,9].reshape(test_size,1).T
+    #numpy.delete
+    y_train = train_volume[:, 6].reshape((ny, train_size))
+    x_train = train_volume[:, 0:6]
+    x_train = np.concatenate((x_train, train_volume[:, 7:-1]), axis = 1).T
 
+    y_validation = validation_volume[:, 6].reshape((ny, validation_size))
+    x_validation = validation_volume[:, 0:6]
+    x_validation = np.concatenate((x_validation, validation_volume[:, 7:-1]), axis = 1).T
+
+    y_test = test_volume[:, 6].reshape((ny,test_size))
+    x_test = test_volume[:, 0:6]
+    x_test = np.concatenate((x_test, test_volume[:, 7:-1]), axis = 1).T
+   
     np.savetxt('x_train.txt', x_train, delimiter=',')   # X is an array
     np.savetxt('y_train.txt', y_train, delimiter=',')   # X is an array
     np.savetxt('x_validation.txt', x_validation, delimiter=',')   # X is an array
